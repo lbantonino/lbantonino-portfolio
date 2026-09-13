@@ -1,0 +1,189 @@
+.pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: clamp(22px, 3vw, 48px);
+  align-items: center;
+  /* Même gabarit que la section « à propos » : sans ce plafond, le bloc
+     s'étalait sur toute la largeur et son bord gauche partait plus loin
+     que celui de l'autre page dès que l'écran dépassait 1260 px. */
+  width: min(100%, 1260px);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 2.8px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+}
+
+.title {
+  margin-bottom: 16px;
+  font-size: clamp(28px, 3.8vw, 56px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.lede {
+  margin: 0 0 22px;
+  max-width: 40ch;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-width: 380px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 19px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(22px);
+  color: var(--ink);
+  font-size: 13.5px;
+  transition: border-color 0.3s ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  border-color: var(--glass-border-hover);
+}
+
+.linkHandle {
+  color: #7c8798;
+  font-size: 11.5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: clamp(18px, 2.4vw, 28px);
+  border-radius: var(--r-lg);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(30px) saturate(170%);
+  box-shadow:
+    var(--glass-inset-strong),
+    0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 10.5px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.input {
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(6, 7, 9, 0.42);
+  color: var(--ink);
+  font-size: 13.5px;
+  letter-spacing: 0;
+  text-transform: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input::placeholder {
+  color: #666e7c;
+}
+
+.input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.textarea {
+  resize: none;
+}
+
+.submit {
+  margin-top: 2px;
+  padding: 14px 24px;
+  border-radius: var(--r-pill);
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0b0f;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 800;
+  font-size: 13.5px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    scale 0.25s var(--ease-out),
+    translate 0.25s var(--ease-out);
+}
+
+/* Un agrandissement de 2 % et une levée d'un pixel : assez pour que
+   l'effet se voie, loin des 5 % et des 9 px de l'effet magnétique. */
+.submit:hover,
+.submit:focus-visible {
+  background: var(--ink-strong);
+  box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.35);
+  scale: 1.02;
+  translate: 0 -1px;
+}
+
+.note {
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* Champ piège : présent dans le DOM pour les robots, invisible et
+   inatteignable pour un humain. `display: none` serait détecté, on le
+   sort donc de l'écran. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.submit:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.submit:disabled:hover {
+  scale: 1;
+  translate: 0 0;
+}
+
+/* La confirmation et l'échec se distinguent du message au repos. */
+.note[data-etat="envoye"] {
+  color: var(--accent);
+}
+
+.note[data-etat="erreur"] {
+  color: #ff9d9d;
+}

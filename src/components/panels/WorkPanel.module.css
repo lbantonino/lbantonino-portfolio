@@ -1,0 +1,224 @@
+/* ------------------------------------------------------------------
+   Projets : une mosaïque de cartes qui remplit un grand rectangle.
+   Les deux projets principaux occupent la première ligne, les trois
+   autres ferment le bloc en dessous.
+   ------------------------------------------------------------------ */
+
+.pane.pane {
+  --u: min(1.05cqw, 1.78cqh);
+
+  font-size: var(--u);
+  padding: 6.4em 2.6em 4.4em 9.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: clip;
+}
+
+.grid {
+  width: 100%;
+  max-width: 84em;
+  height: 100%;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  /* Six colonnes par quatre rangées : les spans des cinq cartes remplissent
+     exactement les 24 cases pour former un grand rectangle net. */
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: row dense;
+  gap: 0.55em;
+}
+
+/* ---------------------------- Carte projet ---------------------------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.3em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+  color: var(--ink);
+  grid-column: span var(--cols, 1);
+  grid-row: span var(--rows, 1);
+  transition:
+    border-color 0.35s ease,
+    background 0.35s ease,
+    translate 0.4s var(--ease-out);
+}
+
+.card[data-span="2"] {
+  grid-column: span 2;
+}
+
+.card[data-linked="true"]:hover,
+.card[data-linked="true"]:focus-visible {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.065);
+  translate: 0 -0.35em;
+}
+
+/* Carte sans lien : elle se signale comme une place réservée. */
+.card[data-linked="false"] {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* ------------------------------ Média ------------------------------ */
+
+.media {
+  position: relative;
+  flex: 1;
+  min-height: 3.5em;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.6s var(--ease-out);
+}
+
+.card[data-linked="true"]:hover .image {
+  scale: 1.04;
+}
+
+/* Cadre nu en attendant la capture : une surface de verre, pas un trou. */
+.mediaEmpty {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(
+      90% 120% at 30% 0%,
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.012)
+    );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.badges {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  right: 8.5em;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.45em;
+}
+
+.kind,
+.open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 0.95em;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 11, 15, 0.5);
+  backdrop-filter: blur(16px);
+  font-size: 0.7em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e6eaf1;
+  white-space: nowrap;
+}
+
+.kindDot {
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.open {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 0.74em;
+  color: var(--ink-soft);
+  transition:
+    color 0.3s ease,
+    background 0.3s ease;
+}
+
+.card[data-linked="true"]:hover .open {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: transparent;
+  color: #0a0b0f;
+}
+
+/* ------------------------------ Texte ------------------------------ */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  gap: 0.5em;
+  padding: 1em 1.05em 1.08em;
+}
+
+.title {
+  font-size: 1.15em;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.text {
+  margin: 0;
+  font-size: 0.82em;
+  line-height: 1.5;
+  color: var(--ink-dim);
+  /* Réparti les lignes à parts égales : sur une carte large, le texte
+     laissait sinon deux mots seuls sur la seconde ligne. */
+  text-wrap: balance;
+}
+
+/* ------------------------------ Mobile ------------------------------ */
+
+@media (max-width: 1200px) {
+  .grid {
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+  }
+
+  .card {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  .media {
+    flex: 0 0 auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 900px) {
+  .pane.pane {
+    --u: clamp(13px, 3.9vw, 17px);
+
+    padding: 6.5em 1.4em 7.5em;
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+
+  .grid {
+    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .card {
+    grid-column: span 1;
+  }
+}

@@ -1,0 +1,56 @@
+/* Simples points, sans pastille de verre autour. */
+.dots {
+  font-size: min(1.05cqw, 1.78cqh);
+  position: absolute;
+  z-index: 36;
+  bottom: 1.6em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+}
+
+/* La zone cliquable reste confortable, seul le point se voit. */
+.dot {
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0.47em;
+  height: 0.47em;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.26);
+  transition:
+    background 0.3s ease,
+    width 0.35s var(--ease-out),
+    height 0.35s var(--ease-out);
+}
+
+.dot:hover::after,
+.dot:focus-visible::after {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.dot[data-active="true"]::after {
+  width: 0.61em;
+  height: 0.61em;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* La barre de navigation du bas fait déjà le travail sur mobile. */
+@media (max-width: 900px) {
+  .dots {
+    display: none;
+  }
+}

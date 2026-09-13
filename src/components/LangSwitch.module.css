@@ -1,0 +1,56 @@
+/* Sélecteur de langue, en bas à gauche de la vitre. */
+.switch {
+  position: absolute;
+  z-index: 38;
+  left: calc(var(--u) * 2.4);
+  bottom: calc(var(--u) * 2.2);
+  display: flex;
+  align-items: center;
+  /* La couche de mobilier ne capte pas les clics : celui-ci doit les reprendre. */
+  pointer-events: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.slash {
+  width: 1px;
+  height: 0.85em;
+  margin: 0 0.6em;
+  background: rgba(255, 255, 255, 0.2);
+  rotate: 14deg;
+}
+
+.button {
+  padding: 0.25em 0.1em;
+  border: none;
+  background: none;
+  font-size: 0.82em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--ink-strong);
+  opacity: 0.3;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  opacity: 0.7;
+}
+
+.button[data-active="true"] {
+  opacity: 1;
+}
+
+/* Sur mobile la barre de navigation occupe le bas : on remonte le
+   sélecteur pour ne pas passer dessous. */
+@media (max-width: 900px) {
+  .switch {
+    left: auto;
+    right: calc(var(--u) * 1.4);
+    bottom: calc(var(--u) * 5.2);
+  }
+}

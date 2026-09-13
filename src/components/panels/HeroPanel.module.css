@@ -1,0 +1,354 @@
+/* ------------------------------------------------------------------
+   Home est dimensionné en proportion de la vitre, pas en pixels.
+   `font-size` sert d'unité de base : tout le reste est exprimé en `em`,
+   donc la page garde exactement les mêmes rapports quelle que soit la
+   taille de l'écran. Le `min()` prend la dimension la plus contrainte
+   pour que rien ne déborde sur un écran large et bas.
+   ------------------------------------------------------------------ */
+.pane.pane {
+  /* `--u` est l'unité de base du panneau. Les décalages absolus doivent
+     s'y référer explicitement : un `em` se calculerait sur la police de
+     l'élément positionné, pas sur celle du panneau. */
+  --u: min(1.05cqw, 1.78cqh);
+
+  font-size: var(--u);
+  padding: 5.4em 11.5em 4.6em;
+  display: flex;
+  align-items: center;
+}
+
+/* La composition est calée à gauche et bornée en largeur : sur un écran
+   très large, les cartes ne partent pas se coller au bord en laissant un
+   vide au milieu. */
+.row {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  max-width: 76em;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 2.6em;
+}
+
+/* ------------------------------ Colonne texte ------------------------------ */
+
+.copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 34em;
+}
+
+.title {
+  font-size: 5.4em;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+}
+
+/* Chaque ligne garde sa hauteur même vide : la frappe ne fait donc
+   jamais sauter le texte qui suit. */
+.titleLine {
+  display: block;
+  min-height: 0.86em;
+  white-space: nowrap;
+}
+
+.titleFaded {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Curseur de frappe : fixe pendant qu'on tape, clignotant à l'arrêt. */
+.caret {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.72em;
+  margin-left: 0.06em;
+  vertical-align: baseline;
+  background: var(--accent);
+  translate: 0 0.02em;
+}
+
+.caret[data-steady="false"] {
+  animation: blink 1s steps(1, end) infinite;
+}
+
+/* Le titre lisible par lecteur d'écran, invisible à l'œil. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lede {
+  max-width: 42ch;
+  margin: 1.6em 0 0;
+  font-size: 1.08em;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75em;
+  margin-top: 2em;
+}
+
+.primary,
+.secondary {
+  padding: 1.15em 2.3em;
+  border-radius: var(--r-pill);
+  font-size: 1.06em;
+  cursor: pointer;
+}
+
+.primary {
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0b0f;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.primary:hover,
+.primary:focus-visible {
+  background: var(--ink-strong);
+}
+
+.secondary {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  color: var(--ink);
+  transition: border-color 0.3s ease;
+}
+
+.secondary:hover,
+.secondary:focus-visible {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* --------------------------- Piliers de services ---------------------------
+   Plus de boîte : chaque pilier est un bloc typographique séparé du
+   suivant par un filet, avec un chiffre fantôme en arrière-plan. Les trois
+   blocs partagent exactement le même bord gauche et la même largeur.
+   -------------------------------------------------------------------------- */
+
+.pillars {
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 30em;
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar {
+  position: relative;
+  padding: 1.5em 0;
+  isolation: isolate;
+}
+
+.pillar + .pillar {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.pillarGhost {
+  position: absolute;
+  z-index: -1;
+  right: 0.2em;
+  top: 50%;
+  translate: 0 -50%;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 900;
+  font-size: 6.4em;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+  transition: -webkit-text-stroke-color 0.45s ease;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pillar:hover .pillarGhost {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.16);
+}
+
+.pillarHead {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 0.9em;
+}
+
+.pillarLabel {
+  flex: 0 0 auto;
+  font-size: 0.72em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Le filet mange l'espace restant : les chiffres se retrouvent donc tous
+   alignés sur le bord droit de la colonne, quelle que soit l'étiquette.
+   Une lueur le parcourt en boucle, décalée d'un pilier à l'autre. */
+.pillarRule {
+  flex: 1;
+  height: 1px;
+  background:
+    linear-gradient(
+        90deg,
+        rgba(125, 240, 206, 0) 0%,
+        rgba(125, 240, 206, 0.75) 45%,
+        rgba(255, 255, 255, 0.9) 50%,
+        rgba(125, 240, 206, 0.75) 55%,
+        rgba(125, 240, 206, 0) 100%
+      )
+      no-repeat,
+    rgba(255, 255, 255, 0.12);
+  background-size:
+    32% 100%,
+    100% 100%;
+  background-position:
+    -40% 0,
+    0 0;
+  animation: ruleSweep 4.2s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+.pillar:nth-child(2) .pillarRule {
+  animation-delay: 1.4s;
+}
+
+.pillar:nth-child(3) .pillarRule {
+  animation-delay: 2.8s;
+}
+
+@keyframes ruleSweep {
+  0% {
+    background-position:
+      -40% 0,
+      0 0;
+  }
+  /* La lueur traverse, puis le filet reste au repos jusqu'au tour suivant. */
+  55%,
+  100% {
+    background-position:
+      140% 0,
+      0 0;
+  }
+}
+
+.pillarIndex {
+  flex: 0 0 auto;
+  font-size: 0.78em;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.pillarTitle {
+  font-size: 1.55em;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-transform: none;
+}
+
+.pillarBody {
+  margin: 0.5em 0 0;
+  font-size: 0.95em;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.pillarPoints {
+  margin: 0.95em 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.pillarPoints li {
+  position: relative;
+  padding-left: 1.1em;
+  font-size: 0.82em;
+  line-height: 1.4;
+  color: var(--ink-dim);
+}
+
+/* Petit tiret en guise de puce, dans l'esprit typographique du site. */
+.pillarPoints li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.55em;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* ------------------------------ Mobile ------------------------------ */
+
+@media (max-width: 900px) {
+  .pane.pane {
+    /* En colonne, c'est la largeur qui commande : on repasse sur une
+       base lisible plutôt que proportionnelle à la hauteur. */
+    --u: clamp(13px, 3.9vw, 17px);
+
+    font-size: var(--u);
+    padding: 6.5em 1.4em 7.5em;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    max-width: none;
+    gap: 2.4em;
+  }
+
+  .logo {
+    top: calc(var(--u) * 2.2);
+    left: calc(var(--u) * 1.4);
+  }
+
+  .pillar {
+    padding: 1.3em 0;
+  }
+
+  /* Les boutons agrandis passaient l'un sous l'autre sur un écran étroit. */
+  .primary,
+  .secondary {
+    flex: 1;
+    padding: 1em 1.2em;
+    font-size: 0.95em;
+    text-align: center;
+  }
+
+  .status {
+    top: calc(var(--u) * 2.2);
+    right: calc(var(--u) * 1.4);
+    font-size: 0.62em;
+  }
+
+  .title {
+    font-size: 3.1em;
+  }
+
+  .pillars {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .pillarGhost {
+    font-size: 5em;
+  }
+}

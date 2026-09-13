@@ -1,0 +1,556 @@
+/* Décor : fond plein écran et deux halos qui dérivent lentement. */
+.stage {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(8px, 1.6vw, 24px);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.orbTop {
+  top: -18%;
+  left: 8%;
+  width: 780px;
+  height: 780px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.07),
+    rgba(0, 0, 0, 0) 66%
+  );
+  animation: drift 22s ease-in-out infinite;
+}
+
+.orbBottom {
+  right: 4%;
+  bottom: -24%;
+  width: 720px;
+  height: 720px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.055),
+    rgba(0, 0, 0, 0) 66%
+  );
+  animation: drift 28s ease-in-out infinite;
+}
+
+/* La « vitre » qui contient tout le site. */
+.shell {
+  position: relative;
+  width: 95.5vw;
+  height: 92vh;
+  height: 92dvh;
+  container-type: size;
+  container-name: shell;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    radial-gradient(
+      130% 110% at 50% -10%,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.032),
+      rgba(255, 255, 255, 0.014)
+    );
+  backdrop-filter: blur(34px) saturate(112%);
+  box-shadow: var(--shadow-shell), inset 0 1px 0 rgba(255, 255, 255, 0.11);
+}
+
+/* ------------------------------------------------------------------
+   Fond animé global : trame vivante, nappes lumineuses, faisceaux fins
+   et poussières. Il reste derrière tous les panneaux.
+   ------------------------------------------------------------------ */
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      90% 80% at 50% 18%,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(
+      140deg,
+      rgba(125, 240, 206, 0.032),
+      rgba(255, 255, 255, 0) 34%,
+      rgba(255, 255, 255, 0.026) 70%,
+      rgba(125, 240, 206, 0.018)
+    );
+}
+
+.dots {
+  position: absolute;
+  inset: -8em;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.085) 1px, transparent 1px),
+    radial-gradient(rgba(125, 240, 206, 0.08) 1px, transparent 1px);
+  background-position:
+    0 0,
+    1.2em 1.2em;
+  background-size:
+    2.4em 2.4em,
+    5.6em 5.6em;
+  mask-image: radial-gradient(
+    125% 92% at 50% 44%,
+    #000 28%,
+    rgba(0, 0, 0, 0) 80%
+  );
+  opacity: 0.72;
+  animation: dotsDrift 26s linear infinite;
+}
+
+@keyframes dotsDrift {
+  to {
+    background-position:
+      2.4em 2.4em,
+      -4.4em 5.6em;
+  }
+}
+
+.aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(52px);
+  opacity: 0.9;
+  will-change: translate, scale, opacity;
+}
+
+.auroraA {
+  width: 37em;
+  height: 37em;
+  left: -6%;
+  top: -20%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.085),
+    rgba(255, 255, 255, 0) 66%
+  );
+  animation: auroraA 22s ease-in-out infinite;
+}
+
+.auroraB {
+  width: 32em;
+  height: 32em;
+  right: -4%;
+  bottom: -18%;
+  background: radial-gradient(
+    circle,
+    rgba(125, 240, 206, 0.08),
+    rgba(125, 240, 206, 0) 68%
+  );
+  animation: auroraB 28s ease-in-out infinite;
+}
+
+.auroraC {
+  width: 26em;
+  height: 26em;
+  left: 48%;
+  top: 28%;
+  background: radial-gradient(
+    circle,
+    rgba(188, 206, 255, 0.052),
+    rgba(188, 206, 255, 0) 68%
+  );
+  animation: auroraC 18s ease-in-out infinite;
+}
+
+@keyframes auroraA {
+  0%,
+  100% {
+    translate: 0 0;
+    scale: 1;
+    opacity: 0.74;
+  }
+  45% {
+    translate: 12% 14%;
+    scale: 1.18;
+    opacity: 1;
+  }
+  72% {
+    translate: 4% 8%;
+    scale: 0.94;
+    opacity: 0.64;
+  }
+}
+
+@keyframes auroraB {
+  0%,
+  100% {
+    translate: 0 0;
+    scale: 1.08;
+  }
+  50% {
+    translate: -13% -10%;
+    scale: 0.95;
+  }
+}
+
+@keyframes auroraC {
+  0%,
+  100% {
+    translate: -12% 8%;
+    scale: 0.9;
+    opacity: 0.42;
+  }
+  50% {
+    translate: 10% -12%;
+    scale: 1.2;
+    opacity: 0.82;
+  }
+}
+
+.beam {
+  position: absolute;
+  width: 28em;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.18),
+    rgba(125, 240, 206, 0.28),
+    rgba(255, 255, 255, 0)
+  );
+  filter: blur(0.3px);
+  opacity: 0;
+  animation: beamSweep 12s ease-in-out infinite;
+}
+
+@keyframes beamSweep {
+  0%,
+  68%,
+  100% {
+    opacity: 0;
+    translate: -4em 0;
+    scale: 0.7 1;
+  }
+  12% {
+    opacity: 0.72;
+  }
+  36% {
+    opacity: 0.16;
+    translate: 8em 0;
+    scale: 1.15 1;
+  }
+}
+
+.scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.035) 49%,
+    rgba(125, 240, 206, 0.04) 50%,
+    rgba(255, 255, 255, 0) 52%
+  );
+  opacity: 0.7;
+  translate: 0 -100%;
+  animation: scanline 9s cubic-bezier(0.65, 0, 0.25, 1) infinite;
+}
+
+@keyframes scanline {
+  0%,
+  18% {
+    translate: 0 -100%;
+  }
+  58%,
+  100% {
+    translate: 0 100%;
+  }
+}
+
+.noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size:
+    100% 4px,
+    4px 100%;
+  mix-blend-mode: screen;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.5),
+    0 0 16px rgba(125, 240, 206, 0.24);
+  opacity: 0;
+  animation-name: particleRise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes particleRise {
+  0% {
+    translate: 0 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  74% {
+    opacity: 0.55;
+  }
+  100% {
+    translate: var(--particle-drift, 20px) -108vh;
+    opacity: 0;
+  }
+}
+
+/* Piste de défilement : un panneau par écran, empilés de haut en bas
+   et aimantés. */
+.scroller {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.pane {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  overflow-y: auto;
+  scrollbar-width: none;
+  position: relative;
+  padding: var(--pane-pad-block-start) var(--pane-pad-inline-end)
+    var(--pane-pad-block-end) var(--pane-pad-inline-start);
+}
+
+.pane::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ------------------------------------------------------------------
+   Mode compact : sous 900px on abandonne le défilement horizontal,
+   les panneaux s'empilent et la vitre occupe tout l'écran.
+   ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .stage {
+    padding: 0;
+    display: block;
+  }
+
+  .shell {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .scroller {
+    /* Aimantation plus souple : sur un écran étroit les panneaux
+       débordent et doivent pouvoir défiler librement. */
+    scroll-snap-type: y proximity;
+  }
+
+  .pane {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 100%;
+    overflow-y: visible;
+    /* place pour la barre du haut et la barre de nav du bas */
+    padding: clamp(88px, 22vw, 108px) clamp(18px, 5vw, 32px)
+      clamp(104px, 26vw, 128px);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Mobilier fixe : logo et disponibilité, identiques sur les cinq
+   sections. Une couche transparente qui ne capte pas les clics.
+   ------------------------------------------------------------------ */
+
+.chrome {
+  --u: min(1.05cqw, 1.78cqh);
+
+  position: absolute;
+  inset: 0;
+  z-index: 37;
+  pointer-events: none;
+  font-size: var(--u);
+}
+
+.logo {
+  position: absolute;
+  top: calc(var(--u) * 2.5);
+  /* Même bord gauche que la barre de navigation. */
+  left: calc(var(--u) * 2.4);
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 900;
+  font-size: 1.05em;
+  letter-spacing: 0.06em;
+  color: var(--ink-strong);
+  opacity: 0.25;
+  white-space: nowrap;
+  animation: logoSwap 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Portrait de section, calé sous le nom et sur le même bord gauche. */
+.avatar {
+  position: absolute;
+  top: calc(var(--u) * 4.2);
+  left: calc(var(--u) * 2.4);
+  display: block;
+  width: calc(var(--u) * 6.5);
+  height: calc(var(--u) * 6.5);
+  animation: avatarSwap 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Pas de cadre : le PNG est détouré, on garde sa silhouette. L'ombre
+   portée suit donc les contours au lieu de dessiner un rond. */
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0.4em 0.8em rgba(0, 0, 0, 0.55));
+}
+
+/* Le portrait change en même temps que le nom, dans le même mouvement. */
+@keyframes avatarSwap {
+  from {
+    opacity: 0;
+    translate: 0 0.5em;
+    scale: 0.82;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .avatar {
+    top: calc(var(--u) * 4.1);
+    left: calc(var(--u) * 1.4);
+    width: calc(var(--u) * 5.4);
+    height: calc(var(--u) * 5.4);
+  }
+}
+
+/* Le changement de nom se fait en fondu, pas en saut sec. */
+@keyframes logoSwap {
+  from {
+    opacity: 0;
+    translate: 0 0.35em;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 0.25;
+    translate: 0 0;
+    filter: blur(0);
+  }
+}
+
+.status {
+  position: absolute;
+  top: calc(var(--u) * 2.5);
+  right: calc(var(--u) * 4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.5em 1em;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border-strong);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.78em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c9d1dd;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0.7em rgba(125, 240, 206, 0.9);
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+@media (max-width: 900px) {
+  .chrome {
+    --u: clamp(13px, 3.9vw, 17px);
+  }
+
+  .logo {
+    top: calc(var(--u) * 2.2);
+    left: calc(var(--u) * 1.4);
+  }
+
+  .status {
+    top: calc(var(--u) * 2.2);
+    right: calc(var(--u) * 1.4);
+    font-size: 0.62em;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Effets d'ambiance de la vitre : halo qui suit le curseur et reflet
+   qui la balaie lentement.
+   ------------------------------------------------------------------ */
+
+.aura {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 520px;
+  height: 520px;
+  margin: -260px 0 0 -260px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  /* Volontairement très discret : une présence, pas un éclairage. */
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.011) 42%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(18px);
+  animation: auraPulse 6s ease-in-out infinite;
+}
+
+
+
+/* Le halo n'a pas de sens sans souris. */
+@media (hover: none), (max-width: 900px) {
+  .aura {
+    display: none;
+  }
+}

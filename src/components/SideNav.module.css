@@ -1,0 +1,164 @@
+.nav {
+  /* Même unité de base que les panneaux : la nav grandit avec la vitre
+     au lieu de rester en pixels fixes sur les grands écrans. */
+  font-size: min(1.05cqw, 1.78cqh);
+  position: absolute;
+  z-index: 40;
+  left: 2.4em;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.72em;
+  padding: 0.86em 0.68em;
+  border-radius: 1.9em;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(30px) saturate(180%);
+  box-shadow:
+    var(--shadow-float),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.monogram {
+  display: grid;
+  place-items: center;
+  width: 2.97em;
+  height: 2.97em;
+  border: none;
+  border-radius: 1.02em;
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.6)
+  );
+  color: #0a0b0f;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 900;
+  font-size: 0.81em;
+  letter-spacing: -0.03em;
+  cursor: pointer;
+}
+
+.divider {
+  width: 1.5em;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.links {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+}
+
+/* Curseur de verre qui glisse jusqu'à la section active. */
+.pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3.1em;
+  height: 3.1em;
+  border-radius: 1.08em;
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.05)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 8px 20px rgba(0, 0, 0, 0.35);
+  transform: translateY(calc(var(--nav-index, 0) * 3.5em));
+  transition: transform 0.55s var(--ease-out);
+  pointer-events: none;
+}
+
+/* Les icônes suivent la même unité que leur bouton. */
+.link svg,
+.social svg {
+  width: 1.35em;
+  height: 1.35em;
+}
+
+.link {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3.1em;
+  height: 3.1em;
+  border: none;
+  border-radius: 1.08em;
+  background: transparent;
+  color: #e6eaf1;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ink-strong);
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 2.7em;
+  height: 2.7em;
+  border-radius: 0.95em;
+  color: #9aa4b4;
+  transition: color 0.3s ease;
+}
+
+.social:hover,
+.social:focus-visible {
+  color: var(--ink-strong);
+}
+
+/* Sur mobile la colonne devient une barre flottante en bas d'écran. */
+@media (max-width: 900px) {
+  .nav {
+    font-size: 14px;
+    left: 50%;
+    top: auto;
+    bottom: clamp(12px, 3vw, 20px);
+    transform: translateX(-50%);
+    flex-direction: row;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 28px;
+    max-width: calc(100vw - 24px);
+  }
+
+  .monogram,
+  .divider,
+  .social {
+    display: none;
+  }
+
+  .links {
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .link {
+    width: 52px;
+    height: 44px;
+    border-radius: 16px;
+  }
+
+  .linkActive {
+    color: var(--ink-strong);
+    background: linear-gradient(
+      150deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.05)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.24);
+  }
+}
