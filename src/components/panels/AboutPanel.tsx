@@ -158,7 +158,12 @@ function initials(label: string) {
 }
 
 function highlightIntro(paragraph: string) {
+  // Les formulations qui désignent le métier dans chaque langue. Elles
+  // sont toutes rendues avec la même signature, « Digital Specialist
+  // Solutions », pour que la marque reste identique dans les deux
+  // versions du site.
   const roleLabels = [
+    "Digital Specialist Solutions",
     "Digital Solutions Specialist",
     "spécialiste des solutions numériques",
   ];

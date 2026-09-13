@@ -151,12 +151,12 @@ const EN: Copy = {
       "software development",
     ],
     paragraphs: [
-      "Hiiiii, I am Antonino and I'm a Digital Solutions Specialist with a multidisciplinary background in web development, graphic design, digital marketing and artificial intelligence.",
+      "Hi, I am Antonino and I'm a Digital Specialist Solutions with a multidisciplinary background in web development, graphic design, digital marketing and artificial intelligence.",
       "I enjoy turning ideas and business needs into practical, modern digital solutions. My experience across design, development and marketing allows me to approach projects from both a technical and creative perspective.",
-      "Working at VOO, Crispin Medical, Opengraphy and Protection Unit sharpened my skills as a web and software developer, in automation, in design, and as a sales representative.",
-      "Today, I mainly work with modern web technologies and AI-assisted tools to build websites, applications, and automated workflows that are useful, efficient, and easy to use.",
-      "My goal is simple: create digital solutions that save time, reduce repetitive tasks, improve efficiency, and make everyday work easier.",
-      "I'm constantly learning and strengthening my skills, with a growing focus on software development, automation, and artificial intelligence.",
+      "Working at VOO, Crispin Medical, Opengraphy and Protection Unit sharpened my skills as a web and software developer, in automation, in design and as a sales representative.",
+      "Today, I mainly work with modern web technologies, AI-assisted tools to build websites, applications, also automated workflows that are useful, efficient and easy to use.",
+      "My goal is simple: create digital solutions that save time, reduce repetitive tasks, improve efficiency and make everyday work easier.",
+      "I'm constantly learning and strengthening my skills, with a growing focus on software development, automation and artificial intelligence.",
     ],
   },
   stack: {
