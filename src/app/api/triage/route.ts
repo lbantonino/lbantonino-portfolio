@@ -15,7 +15,12 @@ import {
  * Rien n'est enregistré, ni le message reçu ni le résultat produit.
  */
 
-const MODELE = "gemini-2.0-flash";
+/**
+ * Modèle Flash, couvert par le niveau gratuit. Les versions sont retirées
+ * régulièrement : quand l'API renvoie un 404, elle nomme le remplaçant
+ * dans son message d'erreur, visible dans le journal du serveur.
+ */
+const MODELE = "gemini-3.6-flash";
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODELE}:generateContent`;
 
 /** Au-delà, on refuse : le quota gratuit est partagé par tous les visiteurs. */
@@ -77,7 +82,13 @@ async function trierParModele(message: string): Promise<Triage | null> {
         contents: [{ parts: [{ text: construireConsigne(message) }] }],
         generationConfig: {
           temperature: 0.3,
-          maxOutputTokens: 700,
+          /**
+           * Ce modèle raisonne avant de répondre, et sa réflexion puise
+           * dans ce même budget. Trop court, la réponse est tronquée en
+           * plein JSON et devient illisible. Il faut donc prévoir large :
+           * la réflexion coûte souvent plus que la réponse elle-même.
+           */
+          maxOutputTokens: 3000,
           responseMimeType: "application/json",
         },
       }),
@@ -92,10 +103,23 @@ async function trierParModele(message: string): Promise<Triage | null> {
     }
 
     const donnees = await reponse.json();
-    const texte: unknown =
-      donnees?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    const candidat = donnees?.candidates?.[0];
+    const texte: unknown = candidat?.content?.parts?.[0]?.text ?? "";
 
-    return typeof texte === "string" ? lireReponseModele(texte) : null;
+    const lu = typeof texte === "string" ? lireReponseModele(texte) : null;
+
+    // Sans cette trace, un basculement sur les règles restait muet : la
+    // démonstration semblait marcher alors que le modèle ne répondait pas.
+    if (!lu) {
+      console.error(
+        "Réponse du modèle inexploitable. finishReason:",
+        candidat?.finishReason,
+        "| début:",
+        String(texte).slice(0, 200),
+      );
+    }
+
+    return lu;
   } catch (erreur) {
     console.error("Appel au modèle impossible :", erreur);
     return null;
