@@ -272,3 +272,25 @@ nav a:hover svg {
   scale: 1.18;
   rotate: -6deg;
 }
+
+/* ------------------------------------------------------------------
+   Titre de section sur téléphone
+   Les sections s'y enchaînent sans aimantation : ce grand mot gris
+   annonce l'entrée dans la suivante, dans l'esprit des chiffres en
+   contour de la page d'accueil. Décoratif, le nom de la section est
+   déjà annoncé par l'en-tête et par la navigation.
+   ------------------------------------------------------------------ */
+
+[data-section-heading] {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  [data-section-heading] {
+    display: none;
+  }
+
+  [data-pane-active="false"] [data-fx] {
+    opacity: 1;
+  }
+}

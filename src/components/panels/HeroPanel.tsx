@@ -1,9 +1,10 @@
 "use client";
 
 import type { Pillar } from "@/lib/i18n";
+import type { ReactNode } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTypewriter } from "@/hooks/useTypewriter";
+import LangSwitch from "../LangSwitch";
 import styles from "./HeroPanel.module.css";
 
 function PillarCard({ pillar, order }: { pillar: Pillar; order: number }) {
@@ -41,6 +42,7 @@ function PillarCard({ pillar, order }: { pillar: Pillar; order: number }) {
 
 type Props = {
   className: string;
+  header: ReactNode;
   isActive: boolean;
   onSeeWork: () => void;
   onStartProject: () => void;
@@ -48,25 +50,31 @@ type Props = {
 
 export default function HeroPanel({
   className,
+  header,
   isActive,
   onSeeWork,
   onStartProject,
 }: Props) {
   const { t } = useLanguage();
-  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   // Les sauts de ligne sont frappés comme les autres caractères.
   const { typed, steady } = useTypewriter(
     t.hero.titleLines.join("\n"),
-    !reducedMotion,
+    true,
   );
   const typedLines = typed.split("\n");
 
   return (
     <section
       className={`${className} ${styles.pane}`}
-      aria-label="Home"
+      aria-label="ANTONINO"
       data-pane-active={isActive}
     >
+      <div className={styles.mobileLang}>
+        <LangSwitch placement="home-mobile" />
+      </div>
+
+      {header}
+
       <div className={styles.row}>
         <div className={styles.copy}>
           {/* Le titre complet reste lu par les lecteurs d'écran ; seule

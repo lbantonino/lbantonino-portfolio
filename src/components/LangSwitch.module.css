@@ -45,12 +45,39 @@
   opacity: 1;
 }
 
-/* Sur mobile la barre de navigation occupe le bas : on remonte le
-   sélecteur pour ne pas passer dessous. */
+.switch[data-placement="home-mobile"] {
+  display: none;
+}
+
 @media (max-width: 900px) {
   .switch {
+    display: none;
+  }
+
+  .switch[data-placement="home-mobile"] {
+    position: relative;
+    z-index: 8;
     left: auto;
-    right: calc(var(--u) * 1.4);
-    bottom: calc(var(--u) * 5.2);
+    bottom: auto;
+    display: inline-flex;
+    pointer-events: auto;
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--r-pill);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(18px) saturate(150%);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .switch[data-placement="home-mobile"] .button {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    opacity: 0.48;
+  }
+
+  .switch[data-placement="home-mobile"] .button[data-active="true"] {
+    opacity: 1;
   }
 }

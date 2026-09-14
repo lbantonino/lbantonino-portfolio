@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 
 import { PROJECT_META, type ProjectMeta } from "@/lib/content";
@@ -9,6 +10,7 @@ import styles from "./WorkPanel.module.css";
 
 type Props = {
   className: string;
+  header: ReactNode;
   isActive: boolean;
 };
 
@@ -88,13 +90,15 @@ function ProjectCard({
   );
 }
 
-export default function WorkPanel({ className, isActive }: Props) {
+export default function WorkPanel({ className, header, isActive }: Props) {
   return (
     <section
       className={`${className} ${styles.pane}`}
       aria-label="Work"
       data-pane-active={isActive}
     >
+      {header}
+
       <div className={styles.grid}>
         {PROJECT_META.map((project, index) => (
           <ProjectCard key={project.title} project={project} index={index} />

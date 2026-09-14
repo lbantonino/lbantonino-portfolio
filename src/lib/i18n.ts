@@ -44,6 +44,7 @@ export type Copy = {
   stack: {
     eyebrow: string;
     title: string;
+    ghost: string;
     groups: { label: string; items: string[] }[];
     marquee: string;
   };
@@ -73,7 +74,7 @@ export type Copy = {
 
 const EN: Copy = {
   htmlLang: "en",
-  sections: ["Home", "Projects", "About", "Contact"],
+  sections: ["ANTONINO", "Projects", "About me", "Contact"],
   status: "Open for projects",
   hero: {
     titleLines: ["Digital", "Specialist", "Solutions"],
@@ -162,6 +163,7 @@ const EN: Copy = {
   stack: {
     eyebrow: "03 — Toolbox",
     title: "The stack I reach for",
+    ghost: "Part of my toolbox",
     groups: [
       {
         label: "Build",
@@ -222,7 +224,7 @@ const EN: Copy = {
 
 const FR: Copy = {
   htmlLang: "fr",
-  sections: ["Accueil", "Projets", "À propos", "Contact"],
+  sections: ["ANTONINO", "Projets", "À propos de moi", "Contact"],
   status: "Ouvert aux projets",
   hero: {
     titleLines: ["Digital", "Specialist", "Solutions"],
@@ -311,6 +313,7 @@ const FR: Copy = {
   stack: {
     eyebrow: "03 — Boîte à outils",
     title: "Les outils que j'utilise",
+    ghost: "Une partie de ma toolbox",
     groups: [
       {
         label: "Développer",
@@ -347,7 +350,7 @@ const FR: Copy = {
   },
   contact: {
     eyebrow: "03 — Contact",
-    titleLines: ["Un projet ?", "Construisons-le."],
+    titleLines: ["Un projet ?", "Parlons-en."],
     lede: [
       "Un site, une automatisation, ou une marque qui a besoin d'un vrai système derrière. Dites-moi ce qui est sur votre bureau, je réponds vite.",
     ],

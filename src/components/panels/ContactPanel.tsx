@@ -1,12 +1,17 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import type { ReactNode } from "react";
 
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/content";
 import { useLanguage } from "@/hooks/useLanguage";
 import styles from "./ContactPanel.module.css";
 
-type Props = { className: string; isActive: boolean };
+type Props = {
+  className: string;
+  header: ReactNode;
+  isActive: boolean;
+};
 
 type Etat = "repos" | "envoi" | "envoye" | "erreur";
 
@@ -18,7 +23,7 @@ type Etat = "repos" | "envoi" | "envoye" | "erreur";
  */
 const ENDPOINT = "https://api.web3forms.com/submit";
 
-export default function ContactPanel({ className, isActive }: Props) {
+export default function ContactPanel({ className, header, isActive }: Props) {
   const { t } = useLanguage();
   const [etat, setEtat] = useState<Etat>("repos");
 
@@ -46,7 +51,7 @@ export default function ContactPanel({ className, isActive }: Props) {
 
       champs.delete("company");
       champs.append("access_key", cle);
-      champs.append("from_name", "Portfolio lbantonino");
+      champs.append("from_name", "Portfolio Antonino");
       champs.append(
         "subject",
         t.contact.mailSubject.replace("{name}", String(champs.get("name") ?? "")),
@@ -82,6 +87,8 @@ export default function ContactPanel({ className, isActive }: Props) {
       aria-label="Contact"
       data-pane-active={isActive}
     >
+      {header}
+
       <div className={styles.grid}>
         <div>
           <h2 className={styles.title} data-fx="clip" style={{ "--fx-i": 1 } as React.CSSProperties}>

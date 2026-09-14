@@ -2,13 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import Image from "next/image";
-
 import { SECTION_AVATARS, SECTION_COUNT } from "@/lib/content";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useMagneticControls, useShellFx } from "@/hooks/useShellFx";
 import LangSwitch from "./LangSwitch";
+import SectionHeader from "./SectionHeader";
 import SideNav from "./SideNav";
 import HeroPanel from "./panels/HeroPanel";
 import WorkPanel from "./panels/WorkPanel";
@@ -24,11 +23,24 @@ export const COMPACT_QUERY = "(max-width: 900px)";
 
 const LAST_INDEX = SECTION_COUNT - 1;
 
+/** Les sections, dans l'ordre du défilement. */
+function panneaux(scroller: HTMLElement) {
+  return Array.from(scroller.children) as HTMLElement[];
+}
+
 /**
- * Sections où le nom reste celui du site plutôt que celui de la page :
- * l'accueil et la page « à propos », où le nom est le sujet.
+ * Section considérée comme courante : la dernière dont le haut est déjà
+ * passé au-dessus du tiers supérieur de l'écran. Se fonde sur les
+ * positions réelles, les sections n'ayant pas toutes la même hauteur.
  */
-const KEEP_NAME_ON = new Set([0]);
+function sectionVisible(scroller: HTMLElement) {
+  const repere = scroller.scrollTop + scroller.clientHeight * 0.35;
+  let trouve = 0;
+  panneaux(scroller).forEach((panneau, i) => {
+    if (panneau.offsetTop <= repere) trouve = i;
+  });
+  return trouve;
+}
 
 /** Delta de molette à cumuler avant de changer de section. */
 const WHEEL_THRESHOLD = 60;
@@ -99,27 +111,25 @@ export default function Portfolio() {
     indexRef.current = index;
   }, [index]);
 
-  const logoText =
-    index === 2
-      ? "ABOUT ME"
-      : KEEP_NAME_ON.has(index)
-        ? "LBANTONINO"
-        : t.sections[index].toUpperCase();
-
-  const avatar = SECTION_AVATARS[index] ?? SECTION_AVATARS[0];
-
   useShellFx(shellRef, auraRef);
   useMagneticControls(shellRef, [index, isCompact]);
+
+  const sectionLabels = [
+    t.sections[0],
+    t.sections[1],
+    t.sections[2],
+    t.sections[3],
+  ];
 
   const goTo = useCallback(
     (target: number) => {
       const scroller = scrollerRef.current;
       if (!scroller) return;
       const clamped = Math.min(LAST_INDEX, Math.max(0, target));
-      scroller.scrollTo({
-        top: scroller.clientHeight * clamped,
-        behavior: "smooth",
-      });
+      const panneau = panneaux(scroller)[clamped];
+      if (!panneau) return;
+      setIndex(clamped);
+      scroller.scrollTo({ top: panneau.offsetTop, behavior: "smooth" });
     },
     [],
   );
@@ -132,8 +142,7 @@ export default function Portfolio() {
 
     let frame = 0;
     const sync = () => {
-      const size = scroller.clientHeight;
-      const next = Math.round(scroller.scrollTop / Math.max(1, size));
+      const next = sectionVisible(scroller);
       setIndex((current) => (current === next ? current : next));
     };
     const onScroll = () => {
@@ -155,20 +164,20 @@ export default function Portfolio() {
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
+    if (isCompact) return;
 
     const realign = () => {
       requestAnimationFrame(() => {
-        const size = scroller.clientHeight;
-        const offset = scroller.scrollTop;
-        const expected = Math.round(offset / Math.max(1, size)) * size;
-        if (Math.abs(offset - expected) < 1) return;
-        scroller.scrollTo({ top: expected });
+        const attendu = panneaux(scroller)[sectionVisible(scroller)]?.offsetTop;
+        if (attendu === undefined) return;
+        if (Math.abs(scroller.scrollTop - attendu) < 1) return;
+        scroller.scrollTo({ top: attendu });
       });
     };
 
     scroller.addEventListener("focusin", realign);
     return () => scroller.removeEventListener("focusin", realign);
-  }, []);
+  }, [isCompact]);
 
   // Molette -> changement de section. On accumule le delta et on déclenche
   // un saut complet plutôt que de laisser le défilement natif : le geste
@@ -243,7 +252,10 @@ export default function Portfolio() {
 
       // Si le défilement précédent est terminé, la section courante fait
       // foi ; sinon on repart de la section déjà visée.
-      const settled = Math.abs(scroller.scrollTop % scroller.clientHeight) < 2;
+      // Le défilement précédent est-il terminé, c'est-à-dire sommes-nous
+      // posés exactement sur le haut d'une section ?
+      const hautActuel = panneaux(scroller)[indexRef.current]?.offsetTop ?? 0;
+      const settled = Math.abs(scroller.scrollTop - hautActuel) < 2;
       const from = settled ? indexRef.current : aimed;
       aimed = Math.min(LAST_INDEX, Math.max(0, from + direction));
       goTo(aimed);
@@ -324,30 +336,12 @@ export default function Portfolio() {
 
         <div ref={auraRef} className={styles.aura} aria-hidden />
 
-        {/* Mobilier fixe : présent à l'identique sur les cinq sections. */}
         <div className={styles.chrome}>
-          {/* Le nom cède la place au titre de la section courante, sauf
-              sur l'accueil et « à propos ». La clé force le fondu. */}
-          <b key={logoText} className={styles.logo}>
-            {logoText}
-          </b>
-          {/* Le portrait suit la section, juste sous son nom. `next/image`
-              redimensionne ces PNG d'1,4 Mo en vignette légère. */}
-          <span key={avatar} className={styles.avatar}>
-            <Image
-              src={avatar}
-              alt=""
-              width={220}
-              height={220}
-              aria-hidden
-              priority={index === 0}
-            />
-          </span>
-
-          <span className={styles.status}>
-            <span className={styles.statusDot} aria-hidden />
-            {t.status}
-          </span>
+          <SectionHeader
+            avatar={SECTION_AVATARS[index] ?? SECTION_AVATARS[0]}
+            label={sectionLabels[index] ?? sectionLabels[0]}
+            mode="fixed"
+          />
           <LangSwitch />
         </div>
 
@@ -356,13 +350,50 @@ export default function Portfolio() {
         <div ref={scrollerRef} className={`${styles.scroller} no-scrollbar`}>
           <HeroPanel
             className={styles.pane}
+            header={
+              <SectionHeader
+                avatar={SECTION_AVATARS[0]}
+                label={t.sections[0]}
+                mode="panel"
+              />
+            }
             isActive={index === 0}
             onSeeWork={() => goTo(1)}
             onStartProject={() => goTo(3)}
           />
-          <WorkPanel className={styles.pane} isActive={index === 1} />
-          <AboutPanel className={styles.pane} isActive={index === 2} />
-          <ContactPanel className={styles.pane} isActive={index === 3} />
+          <WorkPanel
+            className={styles.pane}
+            header={
+              <SectionHeader
+                avatar={SECTION_AVATARS[1]}
+                label={t.sections[1]}
+                mode="panel"
+              />
+            }
+            isActive={index === 1}
+          />
+          <AboutPanel
+            className={styles.pane}
+            header={
+              <SectionHeader
+                avatar={SECTION_AVATARS[2]}
+                label={t.sections[2]}
+                mode="panel"
+              />
+            }
+            isActive={index === 2}
+          />
+          <ContactPanel
+            className={styles.pane}
+            header={
+              <SectionHeader
+                avatar={SECTION_AVATARS[3]}
+                label={t.sections[3]}
+                mode="panel"
+              />
+            }
+            isActive={index === 3}
+          />
         </div>
 
       </main>

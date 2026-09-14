@@ -187,3 +187,33 @@
 .note[data-etat="erreur"] {
   color: #ff9d9d;
 }
+
+@media (max-width: 900px) {
+  .pane {
+    justify-content: flex-start;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .title {
+    font-size: clamp(27px, 9.2vw, 38px);
+    letter-spacing: -0.035em;
+  }
+
+  .lede {
+    max-width: none;
+  }
+
+  .links {
+    max-width: none;
+  }
+
+  .link {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

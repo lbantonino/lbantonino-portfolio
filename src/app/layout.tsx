@@ -17,11 +17,11 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "lbantonino - Digital Specialist Solutions",
+  title: "Digital Specialist Solutions | Antonino",
   description:
     "Full-stack developer specialised in front-end, based in Brussels. Web development, AI automation and brand systems.",
   openGraph: {
-    title: "lbantonino - Digital Specialist Solutions",
+    title: "Digital Specialist Solutions | Antonino",
     description:
       "Web development, AI automation and brand systems, from Brussels.",
     type: "website",

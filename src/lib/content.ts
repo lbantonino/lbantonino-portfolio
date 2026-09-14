@@ -48,7 +48,6 @@ export type ProjectMeta = {
   stack: string[];
   category: Category;
   /** Année de livraison. Laissée vide, elle n'est pas affichée. */
-  year: string;
   /**
    * Encombrement dans la mosaïque, en cases. Le placement est automatique
    * et compact : faire varier ces deux nombres suffit à casser la
@@ -63,7 +62,6 @@ export type ProjectMeta = {
  *
  * À COMPLÉTER :
  *  - `img` est vide partout, les cartes attendent leurs captures.
- *  - `year` est vide : je n'ai pas les dates réelles.
  *  - les `stack` des deux sites clients ne contiennent que ce qui est
  *    observable depuis le site publié.
  */
@@ -74,7 +72,6 @@ export const PROJECT_META: ProjectMeta[] = [
     img: '/projects/behybrid.png',
     stack: ['Next.js', 'TypeScript', 'Supabase'],
     category: 'web',
-    year: '',
     cols: 3,
     rows: 2,
   },
@@ -84,7 +81,6 @@ export const PROJECT_META: ProjectMeta[] = [
     img: '/projects/groupservices.png',
     stack: ['WordPress'],
     category: 'web',
-    year: '',
     cols: 3,
     rows: 2,
   },
@@ -94,7 +90,6 @@ export const PROJECT_META: ProjectMeta[] = [
     img: '/projects/baertantiquité.png',
     stack: ['WordPress'],
     category: 'web',
-    year: '',
     cols: 2,
     rows: 2,
   },
@@ -104,7 +99,6 @@ export const PROJECT_META: ProjectMeta[] = [
     img: '/projects/bemovies.png',
     stack: ['TMDB', 'JS', 'SwiperJS'],
     category: 'app',
-    year: '',
     cols: 2,
     rows: 2,
   },
@@ -116,7 +110,6 @@ export const PROJECT_META: ProjectMeta[] = [
     img: '/projects/automate.png',
     stack: ['n8n', 'OpenAI', 'Gmail', 'Notion'],
     category: 'automation',
-    year: '',
     cols: 2,
     rows: 2,
   },

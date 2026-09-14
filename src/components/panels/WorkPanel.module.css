@@ -207,9 +207,9 @@
   .pane.pane {
     --u: clamp(13px, 3.9vw, 17px);
 
-    padding: 6.5em 1.4em 7.5em;
+    padding: var(--mobile-header-space) 1.4em 2.2em;
     justify-content: flex-start;
-    overflow-y: auto;
+    overflow-y: visible;
   }
 
   .grid {

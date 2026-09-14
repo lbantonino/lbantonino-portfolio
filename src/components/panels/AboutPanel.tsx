@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { ReactNode } from "react";
 
 import { useLanguage } from "@/hooks/useLanguage";
 import styles from "./AboutPanel.module.css";
 
-type Props = { className: string; isActive: boolean };
+type Props = {
+  className: string;
+  header: ReactNode;
+  isActive: boolean;
+};
 
 const STACK_NODES = [
   {
@@ -116,7 +121,7 @@ const STACK_NODES = [
     x: 14,
     y: 38,
     delay: 2.1,
-    iconUrl: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg",
+    icon: "openai",
   },
   { id: "figma", group: 2, item: 0, x: 85, y: 16, delay: 2.7, icon: "figma" },
   {
@@ -126,7 +131,7 @@ const STACK_NODES = [
     x: 85,
     y: 58,
     delay: 3.9,
-    iconUrl: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobe.svg",
+    icon: "adobe",
   },
 ] as const;
 
@@ -230,7 +235,7 @@ function highlightKeywords(
   });
 }
 
-export default function AboutPanel({ className, isActive }: Props) {
+export default function AboutPanel({ className, header, isActive }: Props) {
   const { t } = useLanguage();
   const nodesById = new Map(STACK_NODES.map((node) => [node.id, node]));
   // Rang global des mots-clés : il pilote leur ordre d'allumage.
@@ -274,6 +279,8 @@ export default function AboutPanel({ className, isActive }: Props) {
       aria-label="About"
       data-pane-active={isActive}
     >
+      {header}
+
       <div className={styles.inner}>
         <div className={styles.copy}>
           <h2
@@ -312,7 +319,7 @@ export default function AboutPanel({ className, isActive }: Props) {
           style={{ "--fx-i": 2 } as React.CSSProperties}
         >
           <span className={styles.toolboxGhost} aria-hidden>
-            Part of my toolbox
+            {t.stack.ghost}
           </span>
 
           <div className={styles.links} aria-hidden>
@@ -360,12 +367,10 @@ export default function AboutPanel({ className, isActive }: Props) {
 
           {STACK_NODES.map((node) => {
             const label = t.stack.groups[node.group]?.items[node.item] ?? "";
-            const iconSrc =
-              "iconUrl" in node
-                ? node.iconUrl
-                : "icon" in node
-                  ? `https://cdn.simpleicons.org/${node.icon}`
-                  : "";
+            // Icônes servies depuis `public/icons`. Un CDN externe
+            // laissait la constellation se vider s'il tombait, et la
+            // version n'y était pas figée.
+            const iconSrc = "icon" in node ? `/icons/${node.icon}.svg` : "";
 
             return (
               <span

@@ -3,7 +3,7 @@
      au lieu de rester en pixels fixes sur les grands écrans. */
   font-size: min(1.05cqw, 1.78cqh);
   position: absolute;
-  z-index: 40;
+  z-index: 80;
   left: 2.4em;
   top: 50%;
   transform: translateY(-50%);
@@ -120,36 +120,53 @@
   color: var(--ink-strong);
 }
 
-/* Sur mobile la colonne devient une barre flottante en bas d'écran. */
+/* Sur mobile la navigation vit dans sa propre zone en bas d'écran. */
 @media (max-width: 900px) {
   .nav {
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     font-size: 14px;
     left: 50%;
     top: auto;
-    bottom: clamp(12px, 3vw, 20px);
+    bottom: calc(9px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     flex-direction: row;
     gap: 6px;
-    padding: 8px 10px;
+    padding: 7px 9px;
     border-radius: 28px;
-    max-width: calc(100vw - 24px);
+    max-width: calc(100vw - 18px);
   }
 
   .monogram,
-  .divider,
-  .social {
+  .divider {
     display: none;
   }
 
   .links {
     flex-direction: row;
-    gap: 2px;
+    gap: 4px;
   }
 
   .link {
-    width: 52px;
-    height: 44px;
+    pointer-events: auto;
+    width: 43px;
+    height: 40px;
     border-radius: 16px;
+  }
+
+  .social {
+    pointer-events: auto;
+    width: 39px;
+    height: 40px;
+    border-radius: 15px;
+    color: #e6eaf1;
+  }
+
+  .link svg,
+  .social svg {
+    width: 18px;
+    height: 18px;
   }
 
   .linkActive {

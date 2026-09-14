@@ -1,0 +1,214 @@
+.header {
+  --section-u: var(--u, min(1.05cqw, 1.78cqh));
+
+  z-index: 6;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: var(--section-u);
+  pointer-events: none;
+}
+
+.header[data-mode="panel"] {
+  display: none;
+}
+
+.header[data-mode="fixed"] {
+  position: absolute;
+  top: calc(var(--section-u) * 2.15);
+  right: calc(var(--section-u) * 2.8);
+  left: calc(var(--section-u) * 2.8);
+  display: flex;
+}
+
+.header[data-mode="fixed"] .badge {
+  gap: 0.9em;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.header[data-mode="fixed"] .avatar {
+  width: 5.05em;
+  height: 5.05em;
+  border: 1px solid rgba(125, 240, 206, 0.28);
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.2), transparent 42%),
+    rgba(16, 31, 31, 0.72);
+  box-shadow:
+    0 1.1em 2.4em rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -0.7em 1.4em rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+
+.header[data-mode="fixed"] .label {
+  padding-top: 0.18em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.72em;
+  min-width: 0;
+  padding: 0.28em 1.18em 0.28em 0.36em;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(125, 240, 206, 0.28);
+  background:
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.04) 40%,
+      rgba(6, 19, 19, 0.46) 78%
+    ),
+    rgba(16, 31, 31, 0.56);
+  box-shadow:
+    0 1em 2.6em rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -0.7em 1.4em rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(18px) saturate(150%);
+  animation: badgeFloat 4.6s ease-in-out infinite;
+}
+
+.avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.85em;
+  height: 4.85em;
+  border-radius: 50%;
+  overflow: visible;
+}
+
+.avatar img {
+  display: block;
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  filter: drop-shadow(0 0.28em 0.5em rgba(0, 0, 0, 0.42));
+}
+
+.label {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(230, 234, 241, 0.82);
+}
+
+@media (max-width: 900px) {
+  .header[data-mode="fixed"] {
+    display: none;
+  }
+
+  .header[data-mode="panel"] {
+    display: flex;
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 64px;
+    margin-bottom: 1.7em;
+    font-size: 16px;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .header[data-mode="panel"]::before {
+    content: attr(data-label);
+    position: absolute;
+    z-index: -1;
+    left: 38px;
+    right: auto;
+    top: 50%;
+    translate: 0 -50%;
+    font-family: var(--font-archivo), sans-serif;
+    font-size: clamp(28px, 10.8vw, 44px);
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.048);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.035);
+  }
+
+  .header[data-mode="panel"]::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    min-width: 34px;
+    background:
+      linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.42),
+          rgba(125, 240, 206, 0)
+        )
+        no-repeat,
+      rgba(125, 240, 206, 0.22);
+    background-size:
+      28% 100%,
+      100% 100%;
+    background-position:
+      -34% 0,
+      0 0;
+    box-shadow: 0 0 8px rgba(125, 240, 206, 0.12);
+    animation: mobileRuleGlow 3.8s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  }
+
+  .badge {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    gap: 0;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .avatar {
+    width: 58px;
+    height: 58px;
+  }
+
+  .label {
+    display: none;
+  }
+}
+
+@keyframes badgeFloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -5px;
+  }
+}
+
+@keyframes mobileRuleGlow {
+  0% {
+    background-position:
+      -34% 0,
+      0 0;
+  }
+  60%,
+  100% {
+    background-position:
+      132% 0,
+      0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header[data-mode="panel"]::after,
+  .badge {
+    animation: none;
+  }
+}

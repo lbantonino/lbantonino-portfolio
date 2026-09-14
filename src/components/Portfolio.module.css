@@ -361,6 +361,9 @@
   }
 
   .shell {
+    --mobile-header-space: clamp(16px, 4.8vw, 24px);
+    --mobile-nav-space: calc(76px + env(safe-area-inset-bottom, 0px));
+
     width: 100%;
     height: 100vh;
     height: 100dvh;
@@ -370,19 +373,34 @@
   }
 
   .scroller {
-    /* Aimantation plus souple : sur un écran étroit les panneaux
-       débordent et doivent pouvoir défiler librement. */
-    scroll-snap-type: y proximity;
+    bottom: var(--mobile-nav-space);
+    overflow-y: auto;
+    scroll-snap-type: none;
+    scroll-padding-top: 0;
+  }
+
+  .pane {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
 
   .pane {
     flex: 0 0 auto;
     height: auto;
-    min-height: 100%;
+    min-height: 0;
+    overflow-x: hidden;
     overflow-y: visible;
-    /* place pour la barre du haut et la barre de nav du bas */
-    padding: clamp(88px, 22vw, 108px) clamp(18px, 5vw, 32px)
-      clamp(104px, 26vw, 128px);
+    overscroll-behavior-y: auto;
+    padding: var(--mobile-header-space) clamp(18px, 5vw, 32px)
+      clamp(28px, 7vw, 42px);
+  }
+
+  .pane:first-child {
+    padding-top: var(--mobile-header-space);
+  }
+
+  .pane:last-child {
+    padding-bottom: clamp(48px, 12vw, 72px);
   }
 }
 
@@ -452,11 +470,13 @@
 }
 
 @media (max-width: 900px) {
+  /* Sur téléphone, la tête passe en haut à gauche et le nom lui fait
+     face à droite : une ligne d'en-tête, plus une colonne. */
   .avatar {
-    top: calc(var(--u) * 4.1);
-    left: calc(var(--u) * 1.4);
-    width: calc(var(--u) * 5.4);
-    height: calc(var(--u) * 5.4);
+    top: 10px;
+    left: 14px;
+    width: 46px;
+    height: 46px;
   }
 }
 
@@ -504,17 +524,35 @@
 @media (max-width: 900px) {
   .chrome {
     --u: clamp(13px, 3.9vw, 17px);
+
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    height: 86px;
+    background: none;
+    backdrop-filter: none;
   }
 
+  /* Le nom passe à droite, face à la tête, et se lit un peu plus fort
+     qu'en grand écran où il n'est qu'un filigrane. */
   .logo {
-    top: calc(var(--u) * 2.2);
-    left: calc(var(--u) * 1.4);
+    top: 58px;
+    left: auto;
+    right: 14px;
+    max-width: 34vw;
+    overflow: hidden;
+    font-size: 0.76em;
+    letter-spacing: 0.08em;
+    text-align: right;
+    text-overflow: ellipsis;
+    opacity: 0.5;
   }
 
+  /* La pastille de disponibilité encombre un bandeau de téléphone.
+     L'information reste sur la page Contact. */
   .status {
-    top: calc(var(--u) * 2.2);
-    right: calc(var(--u) * 1.4);
-    font-size: 0.62em;
+    display: none;
   }
 }
 
