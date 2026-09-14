@@ -166,7 +166,7 @@ const REPONSES: Record<Categorie, { fr: string; en: string }> = {
   },
   question: {
     fr: "Bonjour, merci pour votre question. Voici ce que je peux vous dire en quelques lignes, et je reste disponible si vous souhaitez qu'on approfondisse.",
-    en: "Hello, thanks for your question. Here's a short answer, and I'm happy to go into more detail if useful.",
+    en: "Hello, thanks for your question. Here's a short answer and I'm happy to go into more detail if useful.",
   },
   spam: {
     fr: "Aucune réponse nécessaire.",

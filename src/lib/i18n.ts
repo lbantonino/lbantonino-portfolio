@@ -78,7 +78,7 @@ const EN: Copy = {
   status: "Open for projects",
   hero: {
     titleLines: ["Digital", "Specialist", "Solutions"],
-    lede: "I build the site, I teach the robots to handle the boring bits, and I make the whole thing look like someone actually cared. Three jobs, one guy, zero group chats.",
+    lede: "I build the site, I teach the robots to handle the boring bits and I make the whole thing look like someone actually cared. Three jobs, one guy, zero group chats.",
     seeWork: "See the work →",
     startProject: "Start a project",
   },
