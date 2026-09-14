@@ -1,91 +1,144 @@
-# Portfolio — Antonino Lo Bianco
+# Portfolio 2026 — Antonino Lo Bianco
 
-Portfolio personnel construit à partir du canvas Claude Design
-[`design/Portfolio.dc.html`](design/Portfolio.dc.html).
+> Digital Specialist Solutions — développement web et logiciel, automatisation par l'IA, identité visuelle. Bruxelles.
+
+Portfolio personnel bilingue, construit en Next.js. Quatre sections qui
+défilent, une démonstration d'automatisation que le visiteur manipule
+lui-même, et un formulaire de contact qui arrive vraiment dans ma boîte.
+
+![Aperçu du portfolio](src/app/opengraph-image.png)
 
 **Stack :** Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · CSS Modules
+
+---
 
 ## Démarrer
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # build de production
-npx eslint .     # lint
+cp .env.example .env.local   # puis renseigner les clés, voir plus bas
+npm run dev                  # http://localhost:3000
 ```
 
-## Le principe du site
+| Commande | Rôle |
+| --- | --- |
+| `npm run dev` | serveur de développement |
+| `npm run build` | build de production |
+| `npm start` | sert le build |
+| `npx eslint .` | lint |
+| `npx tsc --noEmit` | vérification des types |
 
-Une seule page découpée en 5 panneaux plein écran (Home, Work, About, Stack,
-Contact) qui défilent **horizontalement** avec aimantation. La molette
-verticale est convertie en défilement horizontal, sauf quand le curseur est
-sur le rail des projets ou sur un panneau qui déborde en hauteur. Les flèches
-du clavier naviguent aussi.
+---
 
-Sous **900px** (constante `COMPACT_QUERY`), le site bascule automatiquement en
-empilement vertical classique, la nav latérale devient une barre en bas
-d'écran et les cartes projets passent en colonne.
+## Variables d'environnement
+
+Les vraies valeurs vivent dans `.env.local`, **qui n'est jamais versionné**.
+`.env.example` est un gabarit : il ne contient que les noms.
+
+| Variable | Rôle | Secret ? |
+| --- | --- | --- |
+| `NEXT_PUBLIC_WEB3FORMS_KEY` | formulaire de contact | Non, publique par conception |
+| `GEMINI_API_KEY` | démonstration de tri | **Oui**, jamais côté navigateur |
+
+La clé Web3Forms porte le préfixe `NEXT_PUBLIC_` parce que le service
+attend un envoi depuis le navigateur et refuse les appels serveur. Elle ne
+permet rien d'autre que d'écrire dans ma boîte mail.
+
+La clé Gemini, elle, ne quitte jamais le serveur.
+
+> **Au déploiement**, il faut reporter ces deux variables dans les
+> réglages de l'hébergeur. `.env.local` reste sur la machine de
+> développement et n'est pas envoyé.
+
+---
+
+## Ce que contient le site
+
+**Accueil** — titre frappé en continu, trois domaines d'intervention, fond
+animé discret.
+
+**Projets** — mosaïque irrégulière de quatre réalisations, dont deux sites
+clients en production.
+
+**À propos** — parcours, et une constellation interactive des outils que
+j'utilise, reliés entre eux.
+
+**Contact** — formulaire relié à Web3Forms, coordonnées directes.
+
+**`/triage`** — démonstration d'automatisation. Le visiteur écrit un
+message, il est classé, une réponse est rédigée et l'action à mener est
+décidée. Rien n'est conservé.
+
+Le site est **bilingue français et anglais**. La langue du visiteur est
+détectée à la première visite, son choix est ensuite mémorisé.
+
+---
+
+## Quelques choix techniques
+
+**Mise à l'échelle proportionnelle.** Les sections ne sont pas figées en
+pixels : elles se dimensionnent en proportion de la fenêtre, à partir
+d'une unité de base commune. La page garde donc exactement les mêmes
+rapports de 1280 à 2560 pixels de large.
+
+**Deux défilements différents.** Sur grand écran, la molette fait changer
+de section d'un geste, avec un verrou qui empêche d'en sauter plusieurs :
+l'inertie d'un pavé tactile ne compte que pour un geste. Sur téléphone,
+aucune aimantation, le doigt commande.
+
+**Le tri fonctionne toujours.** Le moteur de `/triage` est de la logique
+pure, sans appel réseau, donc réutilisable et testable. Quand le modèle
+n'est pas joignable, un classement déterministe par règles prend le
+relais : la démonstration répond même sans clé configurée.
+
+**Aucune dépendance externe au chargement.** Les icônes, les polices et
+les visuels sont servis par le site lui-même. Aucune requête vers un
+service tiers.
+
+---
 
 ## Structure
 
 ```
 src/
 ├── app/
-│   ├── globals.css       # tokens de design + animations globales
-│   ├── layout.tsx        # polices (Archivo, Space Grotesk) + metadata SEO
-│   └── page.tsx
+│   ├── api/triage/     # tri d'un message, clé côté serveur
+│   ├── triage/         # la page de démonstration
+│   ├── globals.css     # couleurs, animations, unités
+│   └── layout.tsx      # polices et métadonnées
 ├── components/
-│   ├── Portfolio.tsx     # orchestrateur : scroll, molette, clavier, index actif
-│   ├── SideNav.tsx       # nav verticale en verre + curseur glissant
-│   ├── PanelDots.tsx     # pagination en bas d'écran
-│   └── panels/           # un fichier .tsx + .module.css par panneau
-├── hooks/
-│   ├── useMediaQuery.ts
-│   ├── useShellFx.ts     # halo au curseur, parallaxe, boutons magnétiques
-│   └── useTilt.ts        # parallaxe 3D (disponible, non utilisé actuellement)
+│   ├── Portfolio.tsx   # défilement, section active, mobilier fixe
+│   └── panels/         # une section par fichier, avec son CSS
+├── hooks/              # langue, media queries, effets, machine à écrire
 └── lib/
-    └── content.ts        # TOUT le texte du site (projets, stack, à propos)
+    ├── content.ts      # projets, liens, visuels
+    ├── i18n.ts         # tous les textes, les deux langues côte à côte
+    └── triage.ts       # moteur de tri, logique pure
 ```
 
-## Le panneau Work
+**Pour modifier un texte**, un seul fichier : `src/lib/i18n.ts`. Les deux
+langues y sont côte à côte, impossible d'en oublier une.
 
-Il fonctionne comme un carrousel de destinations : le **grand titre à gauche
-affiche le projet actif**, et les cartes de droite se chevauchent (~35%) dans
-un rail qui défile horizontalement. La carte la plus proche du centre du rail
-devient l'active et pilote le titre, le texte, les tags et le compteur.
-Cliquer une carte la ramène au centre.
+**Pour ajouter un projet**, un objet dans `src/lib/content.ts` et son
+texte dans `i18n.ts`. Les champs `cols` et `rows` décident de sa place
+dans la mosaïque.
 
-Le chevauchement se règle d'une seule ligne, dans
-`WorkPanel.module.css` :
+---
 
-```css
---card-overlap: calc(var(--card-w) * -0.35); /* 0.35 = 35% de recouvrement */
-```
+## Déploiement
 
-## Deux pièges à connaître
+1. Reporter `NEXT_PUBLIC_WEB3FORMS_KEY` et `GEMINI_API_KEY` chez
+   l'hébergeur.
+2. Déployer depuis la branche `main`.
+3. Lier le nom de domaine.
+4. Envoyer un message depuis le formulaire pour vérifier qu'il arrive.
+5. Passer l'URL dans le *Post Inspector* de LinkedIn : leur cache
+   d'aperçus est tenace, sans ça le premier partage peut rester sans
+   vignette.
 
-1. **Le panneau Work est en `overflow: clip` sur les deux axes**, avec un
-   sélecteur doublé (`.pane.pane`) pour passer devant la classe partagée.
-   En `hidden`, donner le focus à une carte fait défiler le panneau entier
-   pour la révéler, et toute la mise en page se décale.
-2. **Le canvas Claude Design pose des positions absolues en pixels** dès
-   qu'on déplace un bloc dans l'éditeur visuel (`left: 3742px`, etc.). Ces
-   coordonnées sont celles du canvas infini, pas de la page. Elles ne sont
-   jamais reprises telles quelles ici : la mise en page est refaite en flux.
+---
 
-## Modifier le contenu
+## Crédits
 
-Tout le texte éditorial vit dans [`src/lib/content.ts`](src/lib/content.ts).
-Ajouter un projet = ajouter un objet dans `PROJECTS`. Aucune autre modification
-n'est nécessaire.
-
-## À faire
-
-- [ ] Héberger les 3 visuels de projets en local (`public/`) plutôt que sur
-      `lbantonino.com`, pour ne pas dépendre de l'ancien site.
-- [ ] Trancher le sort de `public/unused-08_21_55.png`, exporté avec le canvas
-      mais référencé nulle part.
-- [ ] Décider du sort du formulaire de contact : il ouvre aujourd'hui le client
-      mail (`mailto:`), comme dans le design. Pour un vrai envoi, ajouter une
-      route API et un service type Brevo ou Resend.
-- [ ] Choisir le nom de domaine et déployer (Vercel).
+Design et développement : Antonino Lo Bianco.
+Icônes des outils : [Simple Icons](https://simpleicons.org), servies en local.
