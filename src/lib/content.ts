@@ -87,7 +87,7 @@ export const PROJECT_META: ProjectMeta[] = [
   {
     title: 'Baert Antiquités',
     href: 'https://www.baert-antiquites.be/',
-    img: '/projects/baertantiquité.png',
+    img: '/projects/baert-antiquites.png',
     stack: ['WordPress'],
     category: 'web',
     cols: 2,
