@@ -31,8 +31,13 @@ function ProjectCard({
   // Une carte sans lien reste un bloc statique : pas d'ancre vide, rien
   // à cliquer, et le lecteur d'écran ne l'annonce pas comme un lien.
   const Tag = linked ? "a" : "div";
+  // Une page du site reste dans l'onglet courant ; un projet hébergé
+  // ailleurs s'ouvre à côté pour ne pas faire quitter le portfolio.
+  const interne = project.href.startsWith("/");
   const linkProps = linked
-    ? { href: project.href, target: "_blank", rel: "noreferrer" }
+    ? interne
+      ? { href: project.href }
+      : { href: project.href, target: "_blank", rel: "noreferrer" }
     : {};
 
   return (

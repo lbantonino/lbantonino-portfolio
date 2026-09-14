@@ -1,0 +1,368 @@
+/* ------------------------------------------------------------------
+   Démonstration du tri des demandes.
+   Page annexe : elle reprend la charte du portfolio, mais en mise en page
+   classique qui défile, sans la vitre ni les sections du site principal.
+   ------------------------------------------------------------------ */
+
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(28px, 5vw, 64px) clamp(18px, 5vw, 48px)
+    clamp(48px, 8vw, 96px);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.inner {
+  width: min(100%, 1180px);
+  margin-inline: auto;
+}
+
+.retour {
+  display: inline-block;
+  margin-bottom: clamp(24px, 4vw, 44px);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
+  transition: color 0.3s ease;
+}
+
+.retour:hover,
+.retour:focus-visible {
+  color: var(--ink-strong);
+}
+
+/* ------------------------------- En-tête ------------------------------- */
+
+.entete {
+  max-width: 46ch;
+  margin-bottom: clamp(30px, 5vw, 52px);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.point {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(125, 240, 206, 0.9);
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+.titre {
+  font-size: clamp(34px, 5.2vw, 62px);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: none;
+}
+
+.titreFaded {
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.intro {
+  margin: 20px 0 0;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* ------------------------------ Colonnes ------------------------------ */
+
+.colonnes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(18px, 2.6vw, 32px);
+  align-items: start;
+}
+
+.formulaire,
+.resultat {
+  padding: clamp(18px, 2.4vw, 28px);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(24px);
+  box-shadow: var(--glass-inset);
+}
+
+/* ------------------------------ Exemples ------------------------------ */
+
+.exemples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.exemplesTitre {
+  margin-right: 4px;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.exemple {
+  padding: 7px 13px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink-soft);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.exemple:hover,
+.exemple:focus-visible {
+  border-color: rgba(255, 255, 255, 0.38);
+  color: var(--ink-strong);
+}
+
+/* ------------------------------- Champ ------------------------------- */
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.zone {
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(6, 7, 9, 0.42);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-transform: none;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.zone::placeholder {
+  color: #666e7c;
+}
+
+.zone:focus {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.compteur {
+  font-size: 11px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.envoyer {
+  padding: 12px 24px;
+  border-radius: var(--r-pill);
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0b0f;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    scale 0.25s var(--ease-out);
+}
+
+.envoyer:hover:not(:disabled),
+.envoyer:focus-visible {
+  background: var(--ink-strong);
+  scale: 1.02;
+}
+
+.envoyer:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.probleme {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: #ff9d9d;
+}
+
+/* ------------------------------ Résultat ------------------------------ */
+
+.resultat {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.attente {
+  margin: auto 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* Trois points qui pulsent pendant l'analyse. */
+.chargement {
+  margin: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.chargement span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.chargement span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.chargement span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    scale: 0.8;
+  }
+  50% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.etiquettes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.categorie,
+.urgenceBadge,
+.confiance {
+  padding: 6px 13px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* La couleur porte le classement : lisible d'un coup d'œil. */
+.categorie[data-categorie="prospect"] {
+  border-color: rgba(125, 240, 206, 0.5);
+  background: rgba(125, 240, 206, 0.12);
+  color: var(--accent);
+}
+
+.categorie[data-categorie="spam"] {
+  border-color: rgba(255, 157, 157, 0.4);
+  background: rgba(255, 157, 157, 0.1);
+  color: #ff9d9d;
+}
+
+.urgenceBadge[data-urgence="haute"] {
+  color: var(--ink-strong);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+.bloc {
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bloc p {
+  margin: 7px 0 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.blocTitre {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.action {
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 800;
+  font-size: 16px !important;
+  color: var(--ink-strong) !important;
+}
+
+.reponse {
+  white-space: pre-wrap;
+}
+
+.copier {
+  margin-top: 12px;
+  padding: 8px 15px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.copier:hover,
+.copier:focus-visible {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--ink-strong);
+}
+
+.moteur {
+  margin: auto 0 0;
+  padding-top: 14px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.moteur[data-moteur="regles"] {
+  color: #d8b98a;
+}

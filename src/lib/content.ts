@@ -103,12 +103,11 @@ export const PROJECT_META: ProjectMeta[] = [
     rows: 2,
   },
   {
-    // PROJET FICTIF, à remplacer par le vrai projet d'automatisation.
-    // Ne pas mettre ce site en ligne avec cette carte telle quelle.
-    title: 'Inbox Triage Pipeline',
-    href: '',
+    title: 'Inbox Triage',
+    // Démonstration interactive hébergée par le portfolio lui-même.
+    href: '/triage',
     img: '/projects/automate.png',
-    stack: ['n8n', 'OpenAI', 'Gmail', 'Notion'],
+    stack: ['Next.js', 'TypeScript', 'Gemini'],
     category: 'automation',
     cols: 2,
     rows: 2,
