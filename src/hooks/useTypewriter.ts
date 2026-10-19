@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 type Phase = "typing" | "holding" | "erasing" | "pausing";
-type State = { count: number; phase: Phase };
+type State = { index: number; count: number; phase: Phase };
 
 const TIMINGS = {
   /** Durée entre deux caractères à la frappe. */
@@ -16,21 +16,26 @@ const TIMINGS = {
   pause: 550,
 };
 
-/** État suivant de la machine : frappe, pause, effacement, reprise. */
-function advance({ count, phase }: State, length: number): State {
+/** État suivant de la machine : frappe, pause, effacement, puis texte
+ *  suivant. */
+function advance(
+  { index, count, phase }: State,
+  length: number,
+  total: number,
+): State {
   switch (phase) {
     case "typing":
       return count >= length
-        ? { count, phase: "holding" }
-        : { count: count + 1, phase };
+        ? { index, count, phase: "holding" }
+        : { index, count: count + 1, phase };
     case "holding":
-      return { count, phase: "erasing" };
+      return { index, count, phase: "erasing" };
     case "erasing":
       return count <= 0
-        ? { count, phase: "pausing" }
-        : { count: count - 1, phase };
+        ? { index, count, phase: "pausing" }
+        : { index, count: count - 1, phase };
     default:
-      return { count, phase: "typing" };
+      return { index: (index + 1) % total, count, phase: "typing" };
   }
 }
 
@@ -49,25 +54,35 @@ function delayFor({ count, phase }: State, length: number): number {
 }
 
 /**
- * Frappe le texte caractère par caractère, le laisse affiché, l'efface,
- * puis recommence sans fin. `enabled` à false rend le texte complet et
- * figé : c'est le cas quand l'utilisateur a réduit les animations.
+ * Frappe chaque texte caractère par caractère, le laisse affiché, l'efface,
+ * puis passe au suivant et recommence sans fin. `enabled` à false rend le
+ * premier texte complet et figé : c'est le cas quand l'utilisateur a
+ * réduit les animations.
  */
-export function useTypewriter(text: string, enabled: boolean) {
-  const [state, setState] = useState<State>({ count: 0, phase: "typing" });
+export function useTypewriter(texts: string[], enabled: boolean) {
+  const [state, setState] = useState<State>({
+    index: 0,
+    count: 0,
+    phase: "typing",
+  });
+
+  const index = enabled ? state.index % texts.length : 0;
+  const text = texts[index];
 
   useEffect(() => {
     if (!enabled) return;
     const id = setTimeout(
-      () => setState((current) => advance(current, text.length)),
+      () =>
+        setState((current) => advance(current, text.length, texts.length)),
       delayFor(state, text.length),
     );
     return () => clearTimeout(id);
-  }, [state, enabled, text.length]);
+  }, [state, enabled, text.length, texts.length]);
 
   const count = enabled ? state.count : text.length;
 
   return {
+    index,
     typed: text.slice(0, count),
     /** Le curseur cesse de clignoter pendant la frappe, comme un vrai. */
     steady: enabled && (state.phase === "typing" || state.phase === "erasing"),

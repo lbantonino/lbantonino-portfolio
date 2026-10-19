@@ -57,10 +57,11 @@ export default function HeroPanel({
 }: Props) {
   const { t } = useLanguage();
   // Les sauts de ligne sont frappés comme les autres caractères.
-  const { typed, steady } = useTypewriter(
-    t.hero.titleLines.join("\n"),
+  const { index, typed, steady } = useTypewriter(
+    t.hero.titles.map((lines) => lines.join("\n")),
     true,
   );
+  const lines = t.hero.titles[index];
   const typedLines = typed.split("\n");
 
   return (
@@ -80,12 +81,17 @@ export default function HeroPanel({
           {/* Le titre complet reste lu par les lecteurs d'écran ; seule
               la version visible est frappée lettre à lettre. */}
           <h1 className={styles.title}>
-            <span className={styles.srOnly}>{t.hero.titleLines.join(" ")}</span>
+            <span className={styles.srOnly}>
+              {t.hero.titles.map((title) => title.join(" ")).join(", ")}
+            </span>
 
-            {t.hero.titleLines.map((line, i) => (
+            {/* Trois lignes toujours rendues, même vides : la hauteur du
+                titre ne bouge pas d'un texte à l'autre. La dernière ligne
+                de chaque titre est estompée. */}
+            {[0, 1, 2].map((i) => (
               <span
-                key={line}
-                className={`${styles.titleLine} ${i === 2 ? styles.titleFaded : ""}`}
+                key={i}
+                className={`${styles.titleLine} ${i === lines.length - 1 ? styles.titleFaded : ""}`}
                 aria-hidden
               >
                 {typedLines[i] ?? ""}

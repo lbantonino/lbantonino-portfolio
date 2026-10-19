@@ -21,8 +21,9 @@ export type Copy = {
   sections: string[];
   status: string;
   hero: {
-    /** Les trois lignes frappées par la machine à écrire. */
-    titleLines: string[];
+    /** Les titres frappés tour à tour par la machine à écrire, chacun
+     *  découpé en lignes (trois au plus). */
+    titles: string[][];
     lede: string;
     seeWork: string;
     startProject: string;
@@ -77,7 +78,11 @@ const EN: Copy = {
   sections: ["ANTONINO", "Projects", "About me", "Contact"],
   status: "Open for projects",
   hero: {
-    titleLines: ["Digital", "Specialist", "Solutions"],
+    titles: [
+      ["Digital", "Solutions", "Specialist"],
+      ["Frontend", "Developer"],
+      ["AI", "Fullstack", "Developer"],
+    ],
     lede: "I build the site, I teach the robots to handle the boring bits and I make the whole thing look like someone actually cared. Three jobs, one guy, zero group chats.",
     seeWork: "See the work →",
     startProject: "Start a project",
@@ -227,7 +232,11 @@ const FR: Copy = {
   sections: ["ANTONINO", "Projets", "À propos de moi", "Contact"],
   status: "Ouvert aux projets",
   hero: {
-    titleLines: ["Digital", "Specialist", "Solutions"],
+    titles: [
+      ["Digital", "Solutions", "Specialist"],
+      ["Frontend", "Developer"],
+      ["AI", "Fullstack", "Developer"],
+    ],
     lede: "Je construis le site, j'apprends aux robots à gérer les tâches ingrates, et je fais en sorte que l'ensemble ait l'air soigné. Trois métiers, une seule personne, zéro réunion inutile.",
     seeWork: "Voir les projets →",
     startProject: "Démarrer un projet",
