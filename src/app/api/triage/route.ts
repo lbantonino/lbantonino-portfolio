@@ -127,14 +127,20 @@ async function trierParModele(message: string): Promise<Triage | null> {
 }
 
 export async function POST(request: Request) {
-  let corps: Record<string, unknown>;
+  let corps: unknown;
   try {
     corps = await request.json();
   } catch {
     return NextResponse.json({ erreur: "corps-invalide" }, { status: 400 });
   }
 
-  const message = corps.message;
+  // Un JSON valide n'est pas forcément un objet : `null`, un nombre ou un
+  // tableau faisaient planter la lecture du message (erreur 500).
+  if (typeof corps !== "object" || corps === null || Array.isArray(corps)) {
+    return NextResponse.json({ erreur: "corps-invalide" }, { status: 400 });
+  }
+
+  const message = (corps as Record<string, unknown>).message;
   if (!messageValide(message)) {
     return NextResponse.json({ erreur: "message-invalide" }, { status: 400 });
   }

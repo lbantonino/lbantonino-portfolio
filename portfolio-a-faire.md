@@ -215,8 +215,14 @@ les deux.
 Les deux langues y sont côte à côte, impossible d'en oublier une.
 
 **Pour ajouter un projet :** un objet dans `src/lib/content.ts`, son
-texte dans `i18n.ts`, et l'image dans `public/projects/`. Les champs
-`cols` et `rows` décident de la place dans la mosaïque.
+texte dans `i18n.ts`, et l'image dans `public/projects/`. Les cinq
+premiers projets forment la mosaïque : leurs champs `cols` et `rows`
+décident de leur place et doivent remplir exactement ses 24 cases. À
+partir du sixième, les projets se rangent en colonnes pleine hauteur à
+droite de la mosaïque, dans la bande qui défile sur le côté : pas besoin
+de `cols` ni de `rows`, et une image en portrait leur va mieux. Si la page
+du projet demande un code, le mettre dans `accessCode` : il s'affiche
+sous la description.
 
 **Les accents dans les noms de fichiers.** Ça a cassé la mise en ligne
 une fois : macOS accepte deux écritures différentes du même `é`, Linux

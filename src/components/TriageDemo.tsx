@@ -197,10 +197,13 @@ export default function TriageDemo() {
             <span className={styles.point} aria-hidden />
             {t.eyebrow}
           </span>
-          <h1 className={styles.titre}>
-            {t.titre[0]}
-            <br />
-            <span className={styles.titreFaded}>{t.titre[1]}</span>
+          {/* `lang` posé ici change en même temps que le texte : le CSS y
+              lit la taille propre à chaque langue (voir .titreLigne). */}
+          <h1 className={styles.titre} lang={lang}>
+            <span className={styles.titreLigne}>{t.titre[0]}</span>
+            <span className={`${styles.titreLigne} ${styles.titreFaded}`}>
+              {t.titre[1]}
+            </span>
           </h1>
           <p className={styles.intro}>{t.intro}</p>
         </header>

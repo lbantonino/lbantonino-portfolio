@@ -34,8 +34,11 @@
 
 /* ------------------------------- En-tête ------------------------------- */
 
+/* L'en-tête prend toute la largeur pour que le titre tienne sur deux lignes ;
+   seul le texte d'intro garde une largeur de lecture limitée. Il sert aussi
+   de repère de largeur (unités cqi) pour réduire le titre sur téléphone. */
 .entete {
-  max-width: 46ch;
+  container-type: inline-size;
   margin-bottom: clamp(30px, 5vw, 52px);
 }
 
@@ -66,11 +69,35 @@
   text-transform: none;
 }
 
+/* Une phrase par ligne, jamais coupée. La taille du titre reste la même tant
+   qu'il y a la place, puis diminue avec la largeur de l'en-tête. Les deux
+   coefficients viennent de la largeur mesurée de chaque phrase dans la page
+   (Archivo 900), avec environ 4 % de marge. Anglais : « A request comes in. »
+   ≈ 9,6 em, « Nobody opens the inbox. » ≈ 11,75 em. Français, plus long :
+   « Une demande arrive. » ≈ 10,25 em, « Personne n'ouvre la boîte. » ≈ 12,65 em. */
+.titreLigne {
+  display: block;
+  white-space: nowrap;
+  font-size: min(1em, 10cqi);
+}
+
 .titreFaded {
+  font-size: min(1em, 8.2cqi);
   color: rgba(255, 255, 255, 0.34);
 }
 
+.titreLigne:lang(fr) {
+  font-size: min(1em, 9.4cqi);
+}
+
+.titreFaded:lang(fr) {
+  font-size: min(1em, 7.6cqi);
+}
+
 .intro {
+  /* Même largeur de lecture qu'avant (46ch de l'en-tête, en 16px) : un ch
+     pris dans la police plus petite de l'intro l'aurait rétrécie. */
+  max-width: 29.5rem;
   margin: 20px 0 0;
   font-size: clamp(14px, 1.2vw, 16px);
   line-height: 1.65;

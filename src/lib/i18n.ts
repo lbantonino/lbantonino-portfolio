@@ -32,6 +32,11 @@ export type Copy = {
   work: {
     explore: string;
     viewProject: string;
+    /** Libellé devant le code d'accès d'un projet protégé (`accessCode`). */
+    accessCode: string;
+    /** Noms des flèches de la bande des projets, pour les lecteurs d'écran. */
+    previous: string;
+    next: string;
     /** Un couple par projet, dans l'ordre de `PROJECT_META`. */
     projects: { badges: string[]; body: string }[];
   };
@@ -122,6 +127,9 @@ const EN: Copy = {
   work: {
     explore: "Explore",
     viewProject: "View project",
+    accessCode: "To get into this project, the access code is",
+    previous: "Previous projects",
+    next: "Next projects",
     projects: [
       {
         badges: ["Development", "Webdesign"],
@@ -142,6 +150,10 @@ const EN: Copy = {
       {
         badges: ["Automate"],
         body: "Sorts incoming requests, drafts the reply and files it, without anyone opening the inbox.",
+      },
+      {
+        badges: ["Automate"],
+        body: "Agent that watches Brussels-Lisbon flight prices on its own and sends a Telegram alert whenever a new low appears.",
       },
     ],
   },
@@ -276,6 +288,9 @@ const FR: Copy = {
   work: {
     explore: "Explorer",
     viewProject: "Voir le projet",
+    accessCode: "Pour entrer dans ce projet, le code d'accès est",
+    previous: "Projets précédents",
+    next: "Projets suivants",
     projects: [
       {
         badges: ["Development", "Webdesign"],
@@ -296,6 +311,10 @@ const FR: Copy = {
       {
         badges: ["Automate"],
         body: "Trie les demandes entrantes, rédige la réponse et la classe, sans que personne n'ouvre la boîte mail.",
+      },
+      {
+        badges: ["Automate"],
+        body: "Agent qui surveille seul le prix des vols Bruxelles-Lisbonne et envoie une alerte Telegram dès qu'un nouveau record tombe.",
       },
     ],
   },

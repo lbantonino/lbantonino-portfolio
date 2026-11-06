@@ -8,18 +8,111 @@
   --u: min(1.05cqw, 1.78cqh);
 
   font-size: var(--u);
-  padding: 6.4em 2.6em 4.4em 9.5em;
+  /* 7.5em en haut : la mosaïque commence 1.5em sous les flèches de la
+     bande (dont le bas tombe à 5.975em), pour qu'elles respirent. */
+  padding: 7.5em 2.6em 4.4em 9.5em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: clip;
 }
 
-.grid {
-  width: 100%;
-  max-width: 84em;
+/* --------------------------- Bande qui défile ---------------------------
+   Elle annule les marges du panneau pour aller du bord gauche de la vitre
+   (sous le menu, qui reste au-dessus) jusqu'au bord droit : les cartes y
+   glissent sur le côté. Elle déborde aussi en haut (soulèvement au survol)
+   et en bas (entrée des cartes, 34px) pour ne rien couper. */
+.rail {
+  container-type: inline-size;
+  flex: none;
+  height: calc(100% + 5em);
+  margin: -0.6em -2.6em -4.4em -9.5em;
+  padding: 0.6em 0 4.4em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* En butée, le geste ne déclenche pas le « page précédente » du Mac. */
+  overscroll-behavior-x: contain;
+}
+
+.track {
+  /* La mosaïque garde sa largeur d'avant : tout l'espace entre les marges
+     du panneau (100cqi = largeur de la bande), plafonné à 84em et centré. */
+  --mosaique: min(100cqi - 12.1em, 84em);
+  --reste: calc((100cqi - 12.1em - var(--mosaique)) / 2);
+
+  display: flex;
+  gap: 0.55em;
+  width: max-content;
   height: 100%;
-  margin-inline: auto;
+  padding-inline: calc(9.5em + var(--reste)) calc(2.6em + var(--reste));
+}
+
+/* Flèches de la bande, pour une souris sans défilement sur le côté.
+   Centrées sur la hauteur de l'avatar de l'en-tête (2.15em + 5.05em / 2),
+   calées sur le bord droit de la mosaïque (même calcul que `--reste`,
+   100cqw étant la largeur de la vitre, donc du panneau). */
+.fleches {
+  position: absolute;
+  z-index: 3;
+  top: calc(2.15em + 5.05em / 2 - 1.3em);
+  right: calc(2.6em + max(0px, (100cqw - 96.1em) / 2));
+  display: flex;
+  gap: 0.55em;
+}
+
+/* Rien ne dépasse : pas de flèches. */
+.fleches[data-utile="false"] {
+  display: none;
+}
+
+.fleche {
+  display: grid;
+  place-items: center;
+  width: 2.6em;
+  height: 2.6em;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border-strong);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(16px);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.fleche svg {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.fleche:not(:disabled):hover,
+.fleche:not(:disabled):focus-visible {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0b0f;
+}
+
+/* Côté atteint : la flèche reste en place mais s'efface. */
+.fleche:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Projet après la mosaïque : une colonne pleine hauteur, de la largeur
+   d'une petite carte (deux colonnes sur six). */
+.extra {
+  flex: none;
+  width: calc((var(--mosaique) - 5 * 0.55em) / 3 + 0.55em);
+}
+
+.grid {
+  flex: none;
+  width: var(--mosaique);
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   /* Six colonnes par quatre rangées : les spans des cinq cartes remplissent
@@ -44,18 +137,17 @@
   transition:
     border-color 0.35s ease,
     background 0.35s ease,
-    translate 0.4s var(--ease-out);
+    transform 0.4s var(--ease-out);
 }
 
-.card[data-span="2"] {
-  grid-column: span 2;
-}
-
+/* Le soulèvement passe par `transform` et non par `translate` : l'animation
+   d'entrée (fxUp) garde la main sur `translate` une fois jouée, et l'aurait
+   annulé. */
 .card[data-linked="true"]:hover,
 .card[data-linked="true"]:focus-visible {
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.065);
-  translate: 0 -0.35em;
+  transform: translateY(-0.35em);
 }
 
 /* Carte sans lien : elle se signale comme une place réservée. */
@@ -183,13 +275,63 @@
   text-wrap: balance;
 }
 
+/* Code d'accès d'un projet protégé : discret, mais le code se lit d'un coup
+   d'œil pour être recopié. */
+.access {
+  margin: 0;
+  font-size: 0.78em;
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
+
+.accessCode {
+  color: var(--ink-strong);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
 /* ------------------------------ Mobile ------------------------------ */
 
+/* Sous 1200px les cartes s'empilent : plus de bande sur le côté, les
+   projets suivants rejoignent simplement la liste. La pile dépasse la
+   hauteur de l'écran : le panneau défile donc en hauteur (la molette reste
+   dans le panneau jusqu'à son bord, puis passe à la section suivante). */
 @media (max-width: 1200px) {
-  .grid {
+  .pane.pane {
+    /* Pas de flèches ici : la pile reprend son espace d'origine en haut. */
+    padding-top: 6.4em;
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+
+  .fleches {
+    display: none;
+  }
+
+  .rail {
+    container-type: normal;
     height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .track {
+    width: 100%;
+    max-width: 84em;
+    height: auto;
+    margin-inline: auto;
+    padding: 0;
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: none;
+  }
+
+  .grid {
+    display: contents;
+  }
+
+  .extra {
+    width: auto;
   }
 
   .card {
@@ -212,10 +354,8 @@
     overflow-y: visible;
   }
 
-  .grid {
-    height: auto;
+  .track {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
   }
 
   .card {

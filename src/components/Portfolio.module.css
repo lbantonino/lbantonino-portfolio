@@ -405,8 +405,8 @@
 }
 
 /* ------------------------------------------------------------------
-   Mobilier fixe : logo et disponibilité, identiques sur les cinq
-   sections. Une couche transparente qui ne capte pas les clics.
+   Mobilier fixe : en-tête de section et choix de la langue, identiques
+   sur toutes les sections. Une couche transparente qui ne capte pas les clics.
    ------------------------------------------------------------------ */
 
 .chrome {
@@ -417,108 +417,6 @@
   z-index: 37;
   pointer-events: none;
   font-size: var(--u);
-}
-
-.logo {
-  position: absolute;
-  top: calc(var(--u) * 2.5);
-  /* Même bord gauche que la barre de navigation. */
-  left: calc(var(--u) * 2.4);
-  font-family: var(--font-archivo), sans-serif;
-  font-weight: 900;
-  font-size: 1.05em;
-  letter-spacing: 0.06em;
-  color: var(--ink-strong);
-  opacity: 0.25;
-  white-space: nowrap;
-  animation: logoSwap 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* Portrait de section, calé sous le nom et sur le même bord gauche. */
-.avatar {
-  position: absolute;
-  top: calc(var(--u) * 4.2);
-  left: calc(var(--u) * 2.4);
-  display: block;
-  width: calc(var(--u) * 6.5);
-  height: calc(var(--u) * 6.5);
-  animation: avatarSwap 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* Pas de cadre : le PNG est détouré, on garde sa silhouette. L'ombre
-   portée suit donc les contours au lieu de dessiner un rond. */
-.avatar img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 0.4em 0.8em rgba(0, 0, 0, 0.55));
-}
-
-/* Le portrait change en même temps que le nom, dans le même mouvement. */
-@keyframes avatarSwap {
-  from {
-    opacity: 0;
-    translate: 0 0.5em;
-    scale: 0.82;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-    scale: 1;
-  }
-}
-
-@media (max-width: 900px) {
-  /* Sur téléphone, la tête passe en haut à gauche et le nom lui fait
-     face à droite : une ligne d'en-tête, plus une colonne. */
-  .avatar {
-    top: 10px;
-    left: 14px;
-    width: 46px;
-    height: 46px;
-  }
-}
-
-/* Le changement de nom se fait en fondu, pas en saut sec. */
-@keyframes logoSwap {
-  from {
-    opacity: 0;
-    translate: 0 0.35em;
-    filter: blur(3px);
-  }
-  to {
-    opacity: 0.25;
-    translate: 0 0;
-    filter: blur(0);
-  }
-}
-
-.status {
-  position: absolute;
-  top: calc(var(--u) * 2.5);
-  right: calc(var(--u) * 4);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55em;
-  padding: 0.5em 1em;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--glass-border-strong);
-  background: rgba(255, 255, 255, 0.05);
-  font-size: 0.78em;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #c9d1dd;
-  white-space: nowrap;
-}
-
-.statusDot {
-  width: 0.45em;
-  height: 0.45em;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0.7em rgba(125, 240, 206, 0.9);
-  animation: blink 2.4s ease-in-out infinite;
 }
 
 @media (max-width: 900px) {
@@ -532,27 +430,6 @@
     height: 86px;
     background: none;
     backdrop-filter: none;
-  }
-
-  /* Le nom passe à droite, face à la tête, et se lit un peu plus fort
-     qu'en grand écran où il n'est qu'un filigrane. */
-  .logo {
-    top: 58px;
-    left: auto;
-    right: 14px;
-    max-width: 34vw;
-    overflow: hidden;
-    font-size: 0.76em;
-    letter-spacing: 0.08em;
-    text-align: right;
-    text-overflow: ellipsis;
-    opacity: 0.5;
-  }
-
-  /* La pastille de disponibilité encombre un bandeau de téléphone.
-     L'information reste sur la page Contact. */
-  .status {
-    display: none;
   }
 }
 

@@ -45,16 +45,22 @@ export type ProjectMeta = {
   href: string;
   /** Visuel de la carte. Vide : la carte affiche un cadre nu. */
   img: string;
+  /**
+   * Code de la page du projet quand elle est protégée : affiché sous la
+   * description, pour que les visiteurs puissent y entrer.
+   */
+  accessCode?: string;
   stack: string[];
   category: Category;
   /** Année de livraison. Laissée vide, elle n'est pas affichée. */
   /**
-   * Encombrement dans la mosaïque, en cases. Le placement est automatique
-   * et compact : faire varier ces deux nombres suffit à casser la
-   * régularité de la grille.
+   * Encombrement dans la mosaïque, en cases (6 colonnes par 4 rangées).
+   * Seuls les cinq premiers projets y entrent, et leurs cases doivent
+   * remplir exactement les 24 de la grille. Les suivants se rangent en
+   * colonnes à droite de la mosaïque : ces deux valeurs ne servent pas.
    */
-  cols: 1 | 2 | 3;
-  rows: 1 | 2 | 3;
+  cols?: 1 | 2 | 3;
+  rows?: 1 | 2 | 3;
 };
 
 /**
@@ -111,5 +117,16 @@ export const PROJECT_META: ProjectMeta[] = [
     category: 'automation',
     cols: 2,
     rows: 2,
+  },
+  {
+    // Après la mosaïque : colonne pleine hauteur, sans `cols` ni `rows`.
+    title: 'Escale IA',
+    // Adresse provisoire : elle changera en mars 2027.
+    href: 'https://lisbonia.vercel.app/',
+    // Visuel en portrait : il remplit la carte haute à droite de la mosaïque.
+    img: '/projects/escale-ia.png',
+    accessCode: 'Antonino12345',
+    stack: ['TypeScript', 'Node.js', 'GitHub Actions', 'Telegram'],
+    category: 'automation',
   },
 ];

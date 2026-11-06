@@ -16,15 +16,6 @@
   margin-inline: auto;
 }
 
-.eyebrow {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 2.8px;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-  margin-bottom: 14px;
-}
-
 .title {
   margin-bottom: 16px;
   font-size: clamp(28px, 3.8vw, 56px);
